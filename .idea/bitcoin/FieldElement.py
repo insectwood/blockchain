@@ -18,7 +18,7 @@ class FieldElement:
         return self.num == other.num and self.prime == other.prime
 
     def __ne__(self, other):
-        raise NotImplementedError
+        return not (self == other)
 
     def __add__(self, other):
         if self.prime != other.prime:
@@ -27,13 +27,28 @@ class FieldElement:
         return self.__class__(num, self.prime)
 
     def __sub__(self, other):
-        raise NotImplementedError
+        if self.prime != other.prime:
+            raise TypeError('Cannot subtract two numbers in different Fields')
+
+        num = (self.num - other.num) % self.prime
+        return self.__class__(num, self.num)
 
     def __mul__(self, other):
-        raise NotImplementedError
+        if self.prime != other.prime:
+            raise TypeError('Cannot multiply two numbers in different Fields')
 
-    def __pow__(self, other):
-        raise NotImplementedError
+        num = (self.num * other.num) % self.prime
+        return self.__class__(num, self.prime)
+
+    def __pow__(self, exponent):
+        #num = (self.num ** exponent) % self.prime
+        n = exponent % (self.prime - 1)
+        num = pow(self.num, n, self.prime)
+        return self.__class__(num, self.prime)
 
     def __truediv__(self, other):
-        raise NotImplementedError
+        if self.prime != other.prime:
+            raise TypeError('Cannot divide two numbers in different Fields')
+
+        num = (self.num * pow(other.num, self.prime - 2, self.prime)) % self.prime
+        return self.__class__(num, self.prime)

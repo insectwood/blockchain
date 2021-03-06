@@ -6,3 +6,5 @@ c = FieldElement(6, 13)
 print(a == b)
 print(a == a)
 print(FieldElement.__add__(a,b) == c)
+
+print(FieldElement(17,31)**-3)
